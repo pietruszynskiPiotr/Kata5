@@ -19,11 +19,12 @@ public class Kata5 {
         // TODO code application logic here
         Kata5 app = new Kata5();
         app.selectAll();
+        app.createNewTable();
     }
-    
+
     public void selectAll() {
         String sql = "SELECT * FROM PEOPLE";
-        try (Connection conn = this.connect(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+        try ( Connection conn = this.connect();  Statement stmt = conn.createStatement();  ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 System.out.println(rs.getInt("id") + "\t"
                         + rs.getString("Name") + "\t"
@@ -34,7 +35,20 @@ public class Kata5 {
             System.out.println(e.getMessage());
         }
     }
-    
+
+    public void createNewTable() {
+        String url = "jdbc:sqlite:Kata5.db";
+        String sql = "CREATE TABLE IF NOT EXISTS direcc_email (\n"
+                + " id integer PRIMARY KEY AUTOINCREMENT,\n"
+                + " direccion text NOT NULL);";
+        try ( Connection conn = this.connect();  Statement stmt = conn.createStatement()) {
+            stmt.execute(sql);
+            System.out.println("Tabla creada");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     private Connection connect() {
         Connection conn = null;
         try {
@@ -43,7 +57,7 @@ public class Kata5 {
             System.out.println("Connexión a SQLite establecida");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-        } 
+        }
         return conn;
     }
 
